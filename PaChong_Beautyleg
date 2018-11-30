@@ -1,17 +1,27 @@
 from urllib import request
 from bs4 import BeautifulSoup
+import os
 
-url = 'http://bbs.voc.com.cn/viewthread.php?tid=5549653'
+# url = 'http://bbs.voc.com.cn/viewthread.php?tid=5549653'
+url = input('请输入网址：')
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'}
 
 req = request.Request(url, headers=headers)
 resp = request.urlopen(req).read()
 soup = BeautifulSoup(resp, 'html5lib')
+pathName=soup.find('h1').text.replace(' \n', '')
+path = r'D:\img\{0}'.format(pathName)
+# 判断路径是否存在
+# 存在     True
+# 不存在   False
+existPath=os.path.exists(path)
+if not existPath:
+    os.makedirs(path)
 items = soup.findAll('img', alt='按此在新窗口浏览图片')
 x = 1
 for item in items:
     src = item.get('src')
     print(src)
-    request.urlretrieve(src, 'D:\img\%s.jpg' % x)
-    x=x+1
+    request.urlretrieve(src, path + '\%s.jpg' % x)
+    x = x + 1
