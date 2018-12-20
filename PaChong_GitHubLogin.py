@@ -9,11 +9,11 @@ def getParams(url, uname, pwd):
     # 转成Beautifulsoup对象
     obj = BeautifulSoup(req, 'html5lib')
     # 查找表单
-    form=obj.find('form')
+    form = obj.find('form')
     # 查找所有的input节点
-    listinput=form.find_all('input')
+    listinput = form.find_all('input')
     # 提取name与对应值
-    
+    print(listinput)
 
 url = 'https://github.com/login'
 getParams(url, 'zhangsan', '123456')
