@@ -90,13 +90,28 @@ class GitHubLogin:
         return self.loginVerfiy(page,uname)
 
     def requestUrl(self, url, payload=None):
-        # 请求信息
-        pass
+        # 请求信息，payload=None为GET方法，否则为post方法
+        print('reuest url:',url)
+        reqhd=request.Request(url,data=payload)
+        req=request.urlopen(reqhd)
+        if req.code==200:
+            content=req.read().decode('utf-8')
+            return content
 
     def parsePostData(self, page, uname, pwd):
-        # 提取登录页面信息，准备post数据
-        pass
+        # 提取登录页面信息，返回提交数据
+        # 获取input节点，utf8,content,commit,token
+        obj=BeautifulSoup(page,'html5lib')
+        form=obj.find('form')
+        listinput=form.findAll('input')
+        result=[[item.get('name'),item.get('value')] for item in listinput]
+        result=dict(result)
+        # 添加用户名和密码
+        result['login']=uname
+        result['password']=pwd
+        return result
 
     def loginVerfiy(self, page, uname):
         # 登录验证
         pass
+
