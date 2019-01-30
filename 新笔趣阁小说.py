@@ -46,7 +46,7 @@ def getContent(list):
     # 获取书籍名称
     bookName = list[len(list) - 1]
     # 文章保存路径
-    path = 'E:\%s.txt' % bookName
+    path = 'D:\%s.txt' % bookName
     # 遍历章节地址列表的信息并增加进度条（tqdm为进度条库）
     for i in tqdm(range(0, len(list))):
         # 判断该条信息是否为文章名称
