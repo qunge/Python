@@ -2,6 +2,7 @@ from urllib import request
 from urllib import parse
 from bs4 import BeautifulSoup
 
+
 # 页面请求
 def requestUrl(url):
     # 定义请求头信息
@@ -21,29 +22,35 @@ def requestUrl(url):
     return content
 
 
-# 获取文章章节列表地址
+# 获取文章章节列表地址和书籍名称
 def getListUrl(url):
-    content=requestUrl(url)
-    dd=content.findAll('dd')
-    list=[]
+    content = requestUrl(url)
+    dd = content.findAll('dd')
+    list = []
     for item in dd:
-        list.append('https://www.xbiquge6.com'+item.find('a').get('href'))
+        list.append('https://www.xbiquge6.com' + item.find('a').get('href'))
+    bookName = content.find('dt').text
+    list.append(bookName)
     return list
 
-def getContent(list):
-    for i in list:
-        content = requestUrl(i)
-        bookName = content.find(class_='bookname').find('h1').text
-        text=content.find(id='content').text
-        path='E:\恶明.txt'
-        f=open(path,'a',encoding='utf-8')
-        f.write(bookName+'\n')
-        f.write(text+'\n')
-        f.write('\n')
-        f.close()
-        print(bookName+'更新完成')
 
-url=input('请输入地址：')
+def getContent(list):
+    bookName = list[len(list) - 1]
+    path = 'E:\%s.txt' % bookName
+    for i in list:
+        if i != list[len(list) - 1]:
+            content = requestUrl(i)
+            listName = content.find(class_='bookname').find('h1').text
+            text = content.find(id='content').text
+            f = open(path, 'a', encoding='utf-8')
+            f.write(listName + '\n')
+            f.write(text + '\n')
+            f.write('\n')
+            f.close()
+            print(listName + '更新完成')
+
+
+url = input('请输入地址：')
 # 获取文章章节列表地址
 list = getListUrl(url)
 getContent(list)
