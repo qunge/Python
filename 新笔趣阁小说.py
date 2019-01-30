@@ -1,6 +1,7 @@
 from urllib import request
 from urllib import parse
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 
 # 页面请求
@@ -37,17 +38,16 @@ def getListUrl(url):
 def getContent(list):
     bookName = list[len(list) - 1]
     path = 'E:\%s.txt' % bookName
-    for i in list:
-        if i != list[len(list) - 1]:
-            content = requestUrl(i)
+    for i in tqdm(range(0, len(list))):
+        if list[i] != list[len(list) - 1]:
+            content = requestUrl(list[i])
             listName = content.find(class_='bookname').find('h1').text
             text = content.find(id='content').text
-            f = open(path, 'a', encoding='utf-8')
-            f.write(listName + '\n')
-            f.write(text + '\n')
-            f.write('\n')
-            f.close()
-            print(listName + '更新完成')
+            with open(path, 'a', encoding='utf-8') as f:
+                f.write(listName + '\n')
+                f.write(text + '\n')
+                f.write('\n')
+            # print(listName + '更新完成')
 
 
 url = input('请输入地址：')
